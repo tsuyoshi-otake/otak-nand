@@ -260,14 +260,45 @@ class CircuitEditor {
         }
 
         // Update UI with level information
-        const levelTitle = document.getElementById('level-title');
-        if (levelTitle) {
-            levelTitle.textContent = level.title;
-        }
+        const levelInfo = document.getElementById('level-info');
+        if (levelInfo) {
+            // 既存の内容をクリア
+            levelInfo.innerHTML = '';
 
-        const levelDescription = document.getElementById('level-description');
-        if (levelDescription) {
-            levelDescription.textContent = level.description;
+            // ヘッダー部分を作成
+            const header = document.createElement('div');
+            header.className = 'level-info-header';
+            
+            const title = document.createElement('div');
+            title.id = 'level-title';
+            title.textContent = level.title;
+            
+            const minimizeBtn = document.createElement('div');
+            minimizeBtn.className = 'minimize-button';
+            minimizeBtn.innerHTML = '▼';
+            
+            header.appendChild(title);
+            header.appendChild(minimizeBtn);
+
+            // コンテンツ部分を作成
+            const content = document.createElement('div');
+            content.className = 'level-info-content';
+            
+            const description = document.createElement('div');
+            description.id = 'level-description';
+            description.textContent = level.description;
+            
+            content.appendChild(description);
+
+            // 要素を追加
+            levelInfo.appendChild(header);
+            levelInfo.appendChild(content);
+
+            // 最小化機能を実装
+            header.addEventListener('click', () => {
+                levelInfo.classList.toggle('minimized');
+                minimizeBtn.innerHTML = levelInfo.classList.contains('minimized') ? '▲' : '▼';
+            });
         }
 
         // Initialize gate palette

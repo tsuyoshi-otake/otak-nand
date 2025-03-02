@@ -1,21 +1,21 @@
 :root {
     /* Light theme */
     --primary-color: #007acc;
-    --text-color-light: #333;
+    --text-color-light: #666666;
     --background-color-light: #fff;
     --border-color-light: #ccc;
     --circuit-background-light: #ffffff;
-    --gate-stroke-light: #000000;
+    --gate-stroke-light: #666666;
     --gate-fill-light: #ffffff;
     --error-background-light: rgba(255, 0, 0, 0.1);
     --alternate-row-light: rgba(0, 0, 0, 0.05);
     
     /* Dark theme */
-    --text-color-dark: #fff;
+    --text-color-dark: #cccccc;
     --background-color-dark: #252526;
     --border-color-dark: #454545;
     --circuit-background-dark: #252526;
-    --gate-stroke-dark: #ffffff;
+    --gate-stroke-dark: #cccccc;
     --gate-fill-dark: #252526;
     --error-background-dark: rgba(255, 0, 0, 0.2);
     --alternate-row-dark: rgba(255, 255, 255, 0.05);
@@ -87,7 +87,7 @@ body {
 
 .button {
     padding: 8px 16px;
-    border: 1px solid var(--primary-color);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     background-color: var(--background-color);
     color: var(--text-color);
@@ -96,9 +96,13 @@ body {
     transition: all 0.2s ease;
 }
 
+body.theme-dark .button {
+    border-color: #707070;
+}
+
 .button:hover {
-    background-color: var(--primary-color);
-    color: var(--background-color);
+    background-color: #707070;
+    color: #eeeeee;
 }
 
 .button.primary {
@@ -123,7 +127,7 @@ body {
 /* Gate Palette */
 #gate-palette {
     position: fixed;
-    top: 80px;  /* ツールバーとマージンの分下げる */
+    top: 86px;  /* ツールバーとマージンの分下げる */
     left: 16px;
     padding: 16px;
     background: var(--background-color);
@@ -165,13 +169,58 @@ body {
     position: fixed;
     top: 100px;
     right: 16px;
-    padding: 16px;
     background-color: var(--background-color);
     border: 1px solid var(--border-color);
     border-radius: 4px;
     width: 300px;
     z-index: 100;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#level-info.minimized {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.level-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+.level-info-header:hover {
+    background-color: var(--alternate-row);
+}
+
+.minimize-button {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.minimize-button:hover {
+    opacity: 1;
+}
+
+.level-info-content {
+    padding: 16px;
+}
+
+#level-info.minimized .level-info-content {
+    display: none;
+}
+
+#level-info.minimized .minimize-button {
+    transform: rotate(180deg);
 }
 
 /* Markdown support for level-info */
@@ -428,6 +477,19 @@ body {
 
 .joint-link {
     cursor: pointer;
+}
+
+/* 接続線とアローのスタイル */
+.joint-link .connection,
+.joint-link .marker-source,
+.joint-link .marker-target {
+    stroke: var(--text-color);
+    fill: var(--text-color);
+}
+
+.joint-link .marker-arrowhead {
+    fill: var(--text-color);
+    stroke: var(--text-color);
 }
 
 .joint-port {
