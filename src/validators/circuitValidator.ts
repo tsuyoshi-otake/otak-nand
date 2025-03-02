@@ -1,19 +1,23 @@
 import { LevelDefinition, CircuitRequirement } from '../levels/types';
 import { Circuit, CircuitDefinition, Device, Connection } from 'digitaljs';
 
+export interface FailedTest {
+    input: number[];
+    expected: number[];
+    actual: number[];
+}
+
+export interface ValidationDetails {
+    gateCount: number;
+    stepCount: number;
+    stars: number;
+    failedTests?: FailedTest[];
+}
+
 export interface ValidationResult {
     success: boolean;
     message: string;
-    details?: {
-        gateCount: number;
-        stepCount: number;
-        stars: number;
-        failedTests?: {
-            input: number[];
-            expected: number[];
-            actual: number[];
-        }[];
-    };
+    details?: ValidationDetails;
 }
 
 interface DeviceMap {
@@ -120,7 +124,7 @@ export class CircuitValidator {
 
     private async validateBehavior(): Promise<ValidationResult> {
         const testCircuit = new Circuit(this.circuit);
-        const failedTests: ValidationResult['details']['failedTests'] = [];
+        const failedTests: FailedTest[] = [];
 
         try {
             for (const testCase of this.level.requirements.testCases) {
