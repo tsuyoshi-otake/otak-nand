@@ -1,3 +1,73 @@
+{
+  "name": "otak-nand",
+  "displayName": "otak-nand",
+  "description": "This is a game where you can tackle various digital circuit puzzles and challenges by leveraging basic logic gates such as AND, OR, NOT, and XOR—not limited to just one type of gate. In each level, you learn the principles of circuit design and how they operate intuitively by devising the right combination of gates to meet the given challenge and assembling the circuit.",
+  "icon": "images/icon.png",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.97.0"
+  },
+  "categories": [
+    "Other",
+    "Education"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "otak-nand.startGame",
+        "title": "Start NAND Game",
+        "category": "NAND Game"
+      },
+      {
+        "command": "otak-nand.openLevel",
+        "title": "Open Level",
+        "category": "NAND Game"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "nand-game",
+          "title": "NAND Game",
+          "icon": "$(circuit-board)"
+        }
+      ]
+    },
+    "views": {
+      "nand-game": [
+        {
+          "id": "otak-nand-levels",
+          "name": "Levels",
+          "visibility": "visible"
+        },
+        {
+          "id": "otak-nand-progress",
+          "name": "Progress",
+          "visibility": "visible"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "otak-nand-levels",
+        "contents": "Welcome to NAND Game!\n[Start Game](command:otak-nand.startGame)\nLearn digital circuit design by solving puzzles."
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile && npm run build-webview",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "watch-webview": "webpack --mode development --watch",
+    "build-webview": "webpack --mode production",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "dependencies": {
+    "jointjs": "^3.7.7",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
