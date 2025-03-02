@@ -107,7 +107,8 @@ export class CircuitEditorPanel {
                 enableScripts: true,
                 localResourceRoots: [
                     vscode.Uri.file(path.join(extensionPath, 'media')),
-                    vscode.Uri.file(path.join(extensionPath, 'node_modules', 'digitaljs', 'dist'))
+                    vscode.Uri.file(path.join(extensionPath, 'node_modules', 'digitaljs', 'dist')),
+                    vscode.Uri.file(path.join(extensionPath, 'dist'))
                 ]
             }
         );
@@ -137,8 +138,13 @@ export class CircuitEditorPanel {
             <title>NAND Game</title>
         </head>
         <body>
+            <div id="gate-palette">
+                <!-- Gate palette items will be added dynamically -->
+                <div class="gate-item" draggable="true" data-gate-type="Nand">NAND</div>
+            </div>
             <div id="container">
                 <div id="toolbar">
+                    <button class="button" id="paletteBtn">Show Gates</button>
                     <button class="button primary" id="validateBtn">Validate Circuit</button>
                     <button class="button" id="resetBtn">Reset</button>
                     <button class="button" id="helpBtn">Help</button>
@@ -156,9 +162,6 @@ export class CircuitEditorPanel {
                         <p>ステップ数: <span id="step-count">0</span></p>
                         <p>獲得スター: <span id="stars">0</span>⭐</p>
                     </div>
-                </div>
-                <div id="gate-palette">
-                    <!-- Gate palette items will be added dynamically -->
                 </div>
             </div>
             <script src="${webviewUri}"></script>

@@ -4,7 +4,7 @@ module.exports = {
     target: 'web',
     entry: './src/editor/webview/index.ts',
     output: {
-        path: path.resolve(__dirname, 'out'),
+        path: path.resolve(__dirname, 'dist'),
         filename: 'webview.js'
     },
     module: {

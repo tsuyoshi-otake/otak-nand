@@ -197,11 +197,36 @@ class ProgressTreeItem extends vscode.TreeItem {
 }
 
 function getAllLevels(): LevelDefinition[] {
-    // Load all levels dynamically from the levels directory
-    const levels: LevelDefinition[] = [Level1];
-    
-    // TODO: Implement dynamic level loading
-    // This would involve reading the levels directory and importing all level files
+    // Static level definitions for now
+    const Level2: LevelDefinition = {
+        id: "stage1-level2",
+        title: "AND Gate using NAND",
+        stage: 1,
+        order: 2,
+        description: `
+In this level, create an AND gate using NAND gates.
+
+Hint: An AND gate can be obtained by inverting the output of a NAND gate.`,
+        hint: "Use an extra NAND gate as an inverter on the NAND output.",
+        requirements: {
+            inputs: 1,
+            outputs: 1,
+            testCases: [
+                { input: [0], output: [0] },
+                { input: [1], output: [1] }
+            ]
+        },
+        constraints: {
+            maxGates: 2,
+            allowedGates: ["Nand"]
+        },
+        starCriteria: {
+            gates: [2, 2, 3],      // 3★: 2 gates, 2★: 2 gates, 1★: 3 gates
+            steps: [3, 4, 5]       // 3★: 3 steps, 2★: 4 steps, 1★: 5 steps
+        }
+    };
+
+    const levels: LevelDefinition[] = [Level1, Level2];
     
     return levels.sort((a, b) => {
         // Sort by stage first, then by order

@@ -121,6 +121,33 @@ class CircuitEditor {
                 this.resetCircuit();
             });
         }
+
+        // パレットの表示/非表示を切り替えるボタン
+        const paletteBtn = document.getElementById('paletteBtn');
+        const gatePalette = document.getElementById('gate-palette');
+        if (paletteBtn && gatePalette) {
+            // 初期状態は非表示
+            gatePalette.classList.add('hidden');
+            
+            paletteBtn.addEventListener('click', () => {
+                console.log('Show/Hide Gates button clicked');
+                if (gatePalette) {
+                    console.log('Current palette classes:', gatePalette.className);
+                    if (gatePalette.classList.contains('visible')) {
+                        console.log('Hiding palette');
+                        gatePalette.classList.remove('visible');
+                        gatePalette.classList.add('hidden');
+                        paletteBtn.textContent = 'Show Gates';
+                    } else {
+                        console.log('Showing palette');
+                        gatePalette.classList.remove('hidden');
+                        gatePalette.classList.add('visible');
+                        paletteBtn.textContent = 'Hide Gates';
+                    }
+                    console.log('Updated palette classes:', gatePalette.className);
+                }
+            });
+        }
     }
 
     private loadLevel(level: LevelData): void {
@@ -413,25 +440,42 @@ class CircuitEditor {
         const connectors: CircuitData['connectors'] = [];
 
         this.graph.getElements().forEach((element: any) => {
-            devices[element.id] = {
-                type: (element as any).get('type'),
-                label: (element as any).get('label')
-            };
+            const type = element.get('type');
+            // 要素の実際の型に基づいて適切な型を設定
+            if (type === 'standard.Path') {
+                devices[element.id] = {
+                    type: 'Nand',
+                    label: 'NAND'
+                };
+            } else if (type === 'standard.Circle' && element.attributes.attrs.label.text === 'IN') {
+                devices[element.id] = {
+                    type: 'Input',
+                    label: 'IN'
+                };
+            } else if (type === 'standard.Circle' && element.attributes.attrs.label.text === 'OUT') {
+                devices[element.id] = {
+                    type: 'Output',
+                    label: 'OUT'
+                };
+            }
         });
 
         this.graph.getLinks().forEach((link: any) => {
-            const source = (link as any).get('source');
-            const target = (link as any).get('target');
-            connectors.push({
-                from: {
-                    id: source.id,
-                    port: source.port
-                },
-                to: {
-                    id: target.id,
-                    port: target.port
-                }
-            });
+            const source = link.get('source');
+            const target = link.get('target');
+            if (source && target && source.id && target.id) {
+                connectors.push({
+                    from: {
+                        id: source.id,
+                        port: source.port || 'out'  // デフォルトポート名を設定
+                    },
+                    to: {
+                        id: target.id,
+                        port: target.port || 'in'   // デフォルトポート名を設定
+                    }
+                });
+                console.log('Added connection:', source.id, '->', target.id);
+            }
         });
 
         return { devices, connectors };
