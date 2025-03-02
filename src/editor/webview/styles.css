@@ -106,7 +106,7 @@ body.theme-dark .button {
 }
 
 .button.primary {
-    background-color: var(--primary-color);
+    background-color: #707070;
     color: var(--background-color);
 }
 
@@ -179,9 +179,13 @@ body.theme-dark .button {
 }
 
 #level-info.minimized {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     overflow: hidden;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .level-info-header {
@@ -191,6 +195,18 @@ body.theme-dark .button {
     padding: 8px 16px;
     border-bottom: 1px solid var(--border-color);
     cursor: pointer;
+}
+
+#level-info.minimized .level-info-header {
+    padding: 0;
+    border: none;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+#level-info.minimized #level-title {
+    display: none;
 }
 
 .level-info-header:hover {
