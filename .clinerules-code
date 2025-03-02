@@ -1,0 +1,154 @@
+# NAND Game VSCode Extension Development Guidelines
+
+## 📌 Game Concept
+"otak-nand" is a VSCode extension game that leverages DigitalJS to create an educational and engaging digital circuit puzzle experience. Starting with basic NAND gates, players progressively learn and build increasingly complex logic circuits, ultimately leading to processor construction.
+
+## 📖 Game Flow and Core Systems
+
+### 1. Tutorial System (Fundamentals)
+- Introduction to NAND gates
+- Input/output rules and operational principles
+- Basic DigitalJS circuit simulation guide
+- Video/visual navigation guide for first-time users
+
+### 2. Puzzle & Level Progression System
+- Clear objectives for each level
+- Circuit construction using specified gates/components
+- Progressive difficulty scaling
+- Automated circuit verification system
+
+#### Circuit Validation Mechanism
+- Circuit design implementation using DigitalJS JSON format
+- Automatic input pattern testing for verification
+- Real-time signal flow visualization
+- Clear success/failure feedback
+
+### 3. Gamification Elements
+- ⭐️ Star rating system (1-3 stars) based on:
+  - Minimum gate count
+  - Minimum step count
+  - Circuit efficiency
+- Achievement system with badges
+- Progress tracking in extension sidebar
+- Circuit sharing via JSON export
+
+### 4. Level Hierarchy
+
+#### Stage 1: Logic Gates
+- Nand
+- Invert
+- And
+- Or
+- Xor
+
+#### Stage 2: Arithmetics
+- Half Adder
+- Full Adder
+- Multi-bit Adder
+- Increment
+- Subtraction
+- Equal to Zero
+- Less than Zero
+
+#### Stage 3: Switching
+- Selector
+- Switch
+- Arithmetic Logic Unit
+- Logic Unit
+- Arithmetic Unit
+- ALU
+- Condition
+
+#### Stage 4: Memory
+- SR Latch
+- D Latch
+- Data Flip-Flop
+- Register
+- Counter
+- RAM
+
+#### Stage 5: Processor
+- Combined Memory
+- ALU Instruction
+- Control Selector
+- Control Unit
+- Computer
+- Input and Output
+
+### 5. UI/UX Design (VSCode Integration)
+- WebView panel for circuit design
+- Drag & drop interface
+- Undo/redo functionality
+- Clear signal flow visualization
+- Sidebar progress tracking
+- Optional hint system
+- Color-coded animations for circuit states
+
+### 6. Testing & Quality Assurance
+1. Unit Tests
+   - Gate operation verification
+   - JSON import/export functionality
+   - Core game mechanics
+
+2. Integration Tests
+   - Circuit validation system
+   - Level progression logic
+   - Save/load functionality
+
+3. End-to-End Tests
+   - Complete game flow
+   - Achievement system
+   - User progress tracking
+
+4. UI/UX Testing
+   - Manual usability testing
+   - Performance optimization
+   - Cross-platform compatibility
+
+### 7. Documentation
+- In-game help and tutorials
+- Concept explanations
+- Term glossary
+- External learning resources
+- API documentation for contributors
+
+## Development Workflow
+1. Create feature branch
+2. Implement feature with tests
+3. Code review
+4. Merge to main
+
+## Project Structure
+```
+src/
+├── editor/           # WebView implementation
+├── game/            # Game logic and state management
+├── levels/          # Level definitions and challenges
+└── validators/      # Circuit validation logic
+```
+
+## Prototyping Strategy
+Initial prototype focus:
+1. Stage 1 Logic Gate levels implementation
+2. Basic circuit validation
+3. Circuit editing functionality
+4. Core UI components
+5. Minimal progress tracking
+
+Sample initial levels:
+- Level 1: NOT gate using NAND
+- Level 2: AND gate using NAND
+- Level 3: OR gate using only NAND
+- Basic evaluation logic and progress saving
+
+## Quality Metrics
+- Test coverage requirements
+- Performance benchmarks
+- Code quality standards
+- User feedback integration
+
+## Release Strategy
+1. Alpha testing with basic features
+2. Beta testing with complete level set
+3. Initial release with core features
+4. Regular updates with new levels
