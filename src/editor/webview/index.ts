@@ -71,6 +71,8 @@ interface CircuitStyle {
     stroke: string;
     fill: string;
     text: string;
+    gate_fill: string;
+    gate_stroke: string;
 }
 
 class CircuitEditor {
@@ -78,6 +80,14 @@ class CircuitEditor {
     private graph!: Joint.dia.Graph;
     private circuit?: Joint.dia.Graph;
     private _currentLevel?: LevelData;
+    private currentStyle: CircuitStyle;
+
+    constructor() {
+        const theme = localStorage.getItem('theme') || 'dark';
+        this.currentStyle = this.getCircuitStyleForTheme(theme);
+        this.initializeUI();
+        this.setupEventListeners();
+    }
 
     private updateCircuitStyle(style: CircuitStyle): void {
         // 背景色の更新
@@ -116,10 +126,6 @@ class CircuitEditor {
         });
     }
 
-    constructor() {
-        this.initializeUI();
-        this.setupEventListeners();
-    }
 
     private initializeUI(): void {
         const container = document.getElementById('circuit-container');
@@ -129,6 +135,11 @@ class CircuitEditor {
 
         /* Initialize JointJS paper and graph */
         this.graph = new Joint.dia.Graph();
+
+        // VSCodeのテーマを取得（デフォルトはダーク）
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        const initialStyle = this.getCircuitStyleForTheme(savedTheme);
+
         this.paper = new Joint.dia.Paper({
             el: container,
             model: this.graph,
@@ -136,16 +147,11 @@ class CircuitEditor {
             height: container.clientHeight,
             gridSize: 10,
             drawGrid: true,
-            background: { color: '#252526' }
+            background: { color: initialStyle.background }
         });
 
-        // 初期ダークテーマスタイルを適用
-        this.updateCircuitStyle({
-            background: '#252526',
-            stroke: '#ffffff',
-            fill: '#252526',
-            text: '#ffffff'
-        });
+        // 初期テーマスタイルを適用
+        this.updateCircuitStyle(initialStyle);
     }
 
     private setupEventListeners(): void {
@@ -186,31 +192,25 @@ class CircuitEditor {
         // Theme toggle button
         const themeBtn = document.getElementById('themeBtn');
         if (themeBtn) {
-            // デフォルトはダークテーマ
-            document.body.classList.add('theme-dark');
+            // ローカルストレージからテーマを取得
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.classList.add(`theme-${savedTheme}`);
+            themeBtn.textContent = savedTheme === 'dark' ? '🌓 Theme' : ' Theme';
+
+            // 初期テーマスタイルを適用
+            this.updateCircuitStyle(this.getCircuitStyleForTheme(savedTheme));
+
             themeBtn.addEventListener('click', () => {
-                if (document.body.classList.contains('theme-dark')) {
-                    document.body.classList.remove('theme-dark');
-                    document.body.classList.add('theme-light');
-                    themeBtn.textContent = '🌞 Theme';
-                    // ライトテーマ用のスタイル
-                    this.updateCircuitStyle({
-                        background: '#ffffff',
-                        stroke: '#000000',
-                        fill: '#ffffff',
-                        text: '#333333'
-                    });
-                } else {
-                    document.body.classList.remove('theme-light');
-                    document.body.classList.add('theme-dark');
-                    themeBtn.textContent = '🌓 Theme';
-                    // ダークテーマ用のスタイル
-                    this.updateCircuitStyle({
-                        background: '#252526',
-                        stroke: '#ffffff',
-                        fill: '#252526',
-                        text: '#ffffff'
-                    });
+                const newTheme = document.body.classList.contains('theme-dark') ? 'light' : 'dark';
+                this.setTheme(newTheme, themeBtn);
+            });
+
+            // VSCodeのテーマ変更を監視
+            window.addEventListener('message', event => {
+                const message = event.data;
+                if (message.type === 'vscode-theme-update') {
+                    const newTheme = message.value === 'vs-dark' ? 'dark' : 'light';
+                    this.setTheme(newTheme, themeBtn);
                 }
             });
         }
@@ -363,8 +363,8 @@ class CircuitEditor {
                 body: {
                     // NANDゲートの図形パス
                     d: 'M 0 0 L 0 40 L 40 40 A 20 20 0 0 0 40 0 L 0 0 Z',
-                    fill: '#ffffff',
-                    stroke: '#000000',
+                    fill: this.getCircuitStyleForTheme(localStorage.getItem('theme') || 'dark').gate_fill,
+                    stroke: this.getCircuitStyleForTheme(localStorage.getItem('theme') || 'dark').gate_stroke,
                     strokeWidth: 2
                 },
                 // 否定を表す小円
@@ -372,8 +372,8 @@ class CircuitEditor {
                     r: 5,
                     cx: 65,
                     cy: 20,
-                    fill: '#ffffff',
-                    stroke: '#000000',
+                    fill: this.getCircuitStyleForTheme(localStorage.getItem('theme') || 'dark').gate_fill,
+                    stroke: this.getCircuitStyleForTheme(localStorage.getItem('theme') || 'dark').gate_stroke,
                     strokeWidth: 2
                 },
                 label: {
@@ -384,7 +384,7 @@ class CircuitEditor {
                     textVerticalAnchor: 'middle',
                     x: 20,
                     y: 20,
-                    fill: '#000000'
+                    fill: this.getCircuitStyleForTheme(localStorage.getItem('theme') || 'dark').text
                 }
             },
             ports: {
@@ -395,13 +395,13 @@ class CircuitEditor {
                             circle: {
                                 r: 4,
                                 magnet: 'passive',
-                                fill: '#ffffff',
-                                stroke: '#000000',
+                                fill: this.currentStyle.gate_fill,
+                                stroke: this.currentStyle.gate_stroke,
                                 strokeWidth: 2
                             },
                             text: {
                                 fontSize: 10,
-                                fill: '#000000'
+                                fill: this.currentStyle.text
                             }
                         },
                         label: {
@@ -415,13 +415,13 @@ class CircuitEditor {
                             circle: {
                                 r: 4,
                                 magnet: true,
-                                fill: '#ffffff',
-                                stroke: '#000000',
+                                fill: this.currentStyle.gate_fill,
+                                stroke: this.currentStyle.gate_stroke,
                                 strokeWidth: 2
                             },
                             text: {
                                 fontSize: 10,
-                                fill: '#000000'
+                                fill: this.currentStyle.text
                             }
                         },
                         label: {
@@ -477,8 +477,8 @@ class CircuitEditor {
             size: { width: 30, height: 30 },
             attrs: {
                 body: {
-                    fill: '#ffffff',
-                    stroke: '#000000',
+                    fill: this.getCircuitStyleForTheme(localStorage.getItem('theme') || 'dark').gate_fill,
+                    stroke: this.getCircuitStyleForTheme(localStorage.getItem('theme') || 'dark').gate_stroke,
                     strokeWidth: 2
                 },
                 label: {
@@ -486,7 +486,8 @@ class CircuitEditor {
                     fontSize: 12,
                     fontFamily: 'Arial',
                     textAnchor: 'middle',
-                    textVerticalAnchor: 'middle'
+                    textVerticalAnchor: 'middle',
+                    fill: this.getCircuitStyleForTheme(localStorage.getItem('theme') || 'dark').text
                 }
             },
             ports: {
@@ -497,8 +498,8 @@ class CircuitEditor {
                             circle: {
                                 r: 4,
                                 magnet: true,
-                                fill: '#ffffff',
-                                stroke: '#000000'
+                                fill: this.currentStyle.gate_fill,
+                                stroke: this.currentStyle.gate_stroke
                             }
                         }
                     }
@@ -517,8 +518,8 @@ class CircuitEditor {
             size: { width: 30, height: 30 },
             attrs: {
                 body: {
-                    fill: '#ffffff',
-                    stroke: '#000000',
+                    fill: this.getCircuitStyleForTheme(localStorage.getItem('theme') || 'dark').gate_fill,
+                    stroke: this.getCircuitStyleForTheme(localStorage.getItem('theme') || 'dark').gate_stroke,
                     strokeWidth: 2
                 },
                 label: {
@@ -526,7 +527,8 @@ class CircuitEditor {
                     fontSize: 12,
                     fontFamily: 'Arial',
                     textAnchor: 'middle',
-                    textVerticalAnchor: 'middle'
+                    textVerticalAnchor: 'middle',
+                    fill: this.getCircuitStyleForTheme(localStorage.getItem('theme') || 'dark').text
                 }
             },
             ports: {
@@ -537,8 +539,8 @@ class CircuitEditor {
                             circle: {
                                 r: 4,
                                 magnet: true,
-                                fill: '#ffffff',
-                                stroke: '#000000'
+                                fill: this.currentStyle.gate_fill,
+                                stroke: this.currentStyle.gate_stroke
                             }
                         }
                     }
@@ -556,13 +558,18 @@ class CircuitEditor {
             position: { x: 100, y: 100 },
             size: { width: 60, height: 40 },
             attrs: {
-                body: { fill: '#ffffff', stroke: '#000000', strokeWidth: 2 },
+                body: {
+                    fill: this.currentStyle.gate_fill,
+                    stroke: this.currentStyle.gate_stroke,
+                    strokeWidth: 2
+                },
                 label: {
                     text: device.label || device.type,
                     fontSize: 12,
                     fontFamily: 'Arial',
                     textAnchor: 'middle',
-                    textVerticalAnchor: 'middle'
+                    textVerticalAnchor: 'middle',
+                    fill: this.currentStyle.text
                 }
             }
         });
@@ -574,7 +581,7 @@ class CircuitEditor {
             target: { id: connector.to.id, selector: connector.to.port },
             attrs: {
                 line: {
-                    stroke: '#000000',
+                    stroke: this.currentStyle.gate_stroke,
                     strokeWidth: 2
                 }
             }
@@ -633,6 +640,36 @@ class CircuitEditor {
             this.graph.clear();
             vscode.postMessage({ command: 'resetCircuit' });
         }
+    }
+
+    private getCircuitStyleForTheme(theme: string): CircuitStyle {
+        const lightStyle: CircuitStyle = {
+            background: '#ffffff',
+            stroke: '#000000',
+            fill: '#ffffff',
+            text: '#333333',
+            gate_fill: '#ffffff',
+            gate_stroke: '#000000'
+        };
+
+        const darkStyle: CircuitStyle = {
+            background: '#252526',
+            stroke: '#ffffff',
+            fill: '#252526',
+            text: '#ffffff',
+            gate_fill: '#252526',
+            gate_stroke: '#ffffff'
+        };
+
+        return theme === 'light' ? lightStyle : darkStyle;
+    }
+
+    private setTheme(theme: string, button: HTMLElement): void {
+        document.body.classList.remove('theme-light', 'theme-dark');
+        document.body.classList.add(`theme-${theme}`);
+        button.textContent = theme === 'dark' ? '🌓 Theme' : '🌞 Theme';
+        localStorage.setItem('theme', theme);
+        this.updateCircuitStyle(this.getCircuitStyleForTheme(theme));
     }
 
     private showValidationResult(result: ValidationResult): void {

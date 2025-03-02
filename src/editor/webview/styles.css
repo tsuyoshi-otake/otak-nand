@@ -4,28 +4,53 @@
     --text-color-light: #333;
     --background-color-light: #fff;
     --border-color-light: #ccc;
+    --circuit-background-light: #ffffff;
+    --gate-stroke-light: #000000;
+    --gate-fill-light: #ffffff;
+    --error-background-light: rgba(255, 0, 0, 0.1);
+    --alternate-row-light: rgba(0, 0, 0, 0.05);
     
     /* Dark theme */
     --text-color-dark: #fff;
     --background-color-dark: #252526;
     --border-color-dark: #454545;
+    --circuit-background-dark: #252526;
+    --gate-stroke-dark: #ffffff;
+    --gate-fill-dark: #252526;
+    --error-background-dark: rgba(255, 0, 0, 0.2);
+    --alternate-row-dark: rgba(255, 255, 255, 0.05);
 
     /* Default theme (will be switched) */
     --text-color: var(--text-color-dark);
     --background-color: var(--background-color-dark);
     --border-color: var(--border-color-dark);
+    --circuit-background: var(--circuit-background-dark);
+    --gate-stroke: var(--gate-stroke-dark);
+    --gate-fill: var(--gate-fill-dark);
+    --error-background: var(--error-background-dark);
+    --alternate-row: var(--alternate-row-dark);
 }
 
 body.theme-light {
     --text-color: var(--text-color-light);
     --background-color: var(--background-color-light);
     --border-color: var(--border-color-light);
+    --circuit-background: var(--circuit-background-light);
+    --gate-stroke: var(--gate-stroke-light);
+    --gate-fill: var(--gate-fill-light);
+    --error-background: var(--error-background-light);
+    --alternate-row: var(--alternate-row-light);
 }
 
 body.theme-dark {
     --text-color: var(--text-color-dark);
     --background-color: var(--background-color-dark);
     --border-color: var(--border-color-dark);
+    --circuit-background: var(--circuit-background-dark);
+    --gate-stroke: var(--gate-stroke-dark);
+    --gate-fill: var(--gate-fill-dark);
+    --error-background: var(--error-background-dark);
+    --alternate-row: var(--alternate-row-dark);
 }
 
 body {
@@ -90,7 +115,7 @@ body {
     grid-column: 2;
     grid-row: 2;
     border: 1px solid var(--border-color);
-    background: white;
+    background: var(--circuit-background);
     position: relative;
     overflow: hidden;
 }
@@ -121,7 +146,8 @@ body {
     padding: 12px;
     border: 2px solid var(--primary-color);
     border-radius: 4px;
-    background: white;
+    background: var(--gate-fill);
+    color: var(--text-color);
     cursor: move;
     user-select: none;
     text-align: center;
@@ -131,7 +157,7 @@ body {
 
 .gate-item:hover {
     background: var(--primary-color);
-    color: white;
+    color: var(--circuit-background);
 }
 
 /* Level Information */
@@ -192,7 +218,7 @@ body {
 }
 
 .failed-test {
-    background-color: rgba(255, 0, 0, 0.1);
+    background-color: var(--error-background);
     padding: 8px;
     margin: 4px 0;
     border-radius: 4px;
@@ -224,25 +250,25 @@ body {
 
 .test-results th {
     background: var(--primary-color);
-    color: white;
+    color: var(--circuit-background);
     font-weight: bold;
 }
 
 .test-results tr:nth-child(even) {
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--alternate-row);
 }
 
 .circuit-stats {
     margin-top: 16px;
     padding: 8px;
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--alternate-row);
     border-radius: 4px;
 }
 
 .stars {
     font-size: 1.2em;
-    color: gold;
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+    color: var(--primary-color);
+    text-shadow: 0 0 2px var(--alternate-row);
     margin: 8px 0;
 }
 
@@ -257,12 +283,12 @@ body {
 
 .joint-port {
     fill: var(--primary-color);
-    stroke: var(--border-color);
+    stroke: var(--gate-stroke);
     cursor: pointer;
 }
 
 .joint-port:hover {
-    fill: #005999;
+    fill: var(--gate-stroke);
 }
 
 /* Responsive Design */
