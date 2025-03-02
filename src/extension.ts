@@ -42,10 +42,17 @@ export function activate(context: vscode.ExtensionContext) {
         treeDataProvider: levelsTreeProvider
     });
 
+    // Create TreeView for progress
+    const progressTreeProvider = new ProgressTreeProvider();
+    const progressTreeView = vscode.window.createTreeView('otak-nand-progress', {
+        treeDataProvider: progressTreeProvider
+    });
+
     context.subscriptions.push(
         startGameCommand,
         openLevelCommand,
-        levelsTreeView
+        levelsTreeView,
+        progressTreeView
     );
 }
 
@@ -104,6 +111,47 @@ class LevelsTreeProvider implements vscode.TreeDataProvider<LevelTreeItem> {
     }
 }
 
+class ProgressTreeProvider implements vscode.TreeDataProvider<ProgressTreeItem> {
+    private _onDidChangeTreeData: vscode.EventEmitter<ProgressTreeItem | undefined | null | void> = new vscode.EventEmitter<ProgressTreeItem | undefined | null | void>();
+    readonly onDidChangeTreeData: vscode.Event<ProgressTreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
+
+    refresh(): void {
+        this._onDidChangeTreeData.fire();
+    }
+
+    getTreeItem(element: ProgressTreeItem): vscode.TreeItem {
+        return element;
+    }
+
+    getChildren(element?: ProgressTreeItem): Thenable<ProgressTreeItem[]> {
+        if (!element) {
+            const progress = getProgress();
+            return Promise.resolve([
+                new ProgressTreeItem(
+                    'Overall Progress',
+                    `${progress.completedLevels}/${progress.totalLevels} Levels`,
+                    vscode.TreeItemCollapsibleState.Expanded
+                )
+            ]);
+        }
+        
+        // Show detailed progress stats when expanding the root item
+        const progress = getProgress();
+        return Promise.resolve([
+            new ProgressTreeItem(
+                'Stars Earned',
+                `${progress.totalStars}/15 Stars`,
+                vscode.TreeItemCollapsibleState.None
+            ),
+            new ProgressTreeItem(
+                'Best Solutions',
+                `${progress.bestSolutions} Optimal Solutions`,
+                vscode.TreeItemCollapsibleState.None
+            )
+        ]);
+    }
+}
+
 class LevelTreeItem extends vscode.TreeItem {
     private _stage?: number;
     private _level?: LevelDefinition;
@@ -137,9 +185,49 @@ class LevelTreeItem extends vscode.TreeItem {
     }
 }
 
+class ProgressTreeItem extends vscode.TreeItem {
+    constructor(
+        public readonly label: string,
+        public readonly description: string,
+        public readonly collapsibleState: vscode.TreeItemCollapsibleState
+    ) {
+        super(label, collapsibleState);
+        this.tooltip = description;
+    }
+}
+
 function getAllLevels(): LevelDefinition[] {
-    // TODO: Load all levels from their respective files
-    return [Level1];
+    // Load all levels dynamically from the levels directory
+    const levels: LevelDefinition[] = [Level1];
+    
+    // TODO: Implement dynamic level loading
+    // This would involve reading the levels directory and importing all level files
+    
+    return levels.sort((a, b) => {
+        // Sort by stage first, then by order
+        if (a.stage !== b.stage) {
+            return a.stage - b.stage;
+        }
+        return a.order - b.order;
+    });
+}
+
+interface GameProgress {
+    completedLevels: number;
+    totalLevels: number;
+    totalStars: number;
+    bestSolutions: number;
+}
+
+function getProgress(): GameProgress {
+    // TODO: Implement progress tracking
+    // This would involve reading from some persistent storage
+    return {
+        completedLevels: 0,
+        totalLevels: getAllLevels().length,
+        totalStars: 0,
+        bestSolutions: 0
+    };
 }
 
 export function deactivate() {}
