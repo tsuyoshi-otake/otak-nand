@@ -67,24 +67,25 @@
     "test": "vscode-test"
   },
   "dependencies": {
+    "digitaljs": "^0.13.1",
     "jointjs": "^3.7.7",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@types/vscode": "^1.97.0",
+    "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.97.0",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
     "@typescript-eslint/parser": "^8.22.0",
-    "eslint": "^9.19.0",
-    "typescript": "^5.7.3",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
-    "@types/lodash": "^4.14.202",
-    "webpack": "^5.90.3",
-    "webpack-cli": "^5.1.4",
-    "ts-loader": "^9.5.1",
     "css-loader": "^6.10.0",
-    "style-loader": "^3.3.4"
+    "eslint": "^9.19.0",
+    "style-loader": "^3.3.4",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.7.3",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
   }
 }

@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { LevelDefinition } from '../levels/types';
 import { Level1Template } from '../levels/stage1/level1';
+import { CircuitValidator } from '../validators/circuitValidator';
 
 export class CircuitEditorPanel {
     public static currentPanel: CircuitEditorPanel | undefined;
@@ -46,7 +47,24 @@ export class CircuitEditorPanel {
                         // TODO: Load level data
                         break;
                     case 'validateCircuit':
-                        // TODO: Validate circuit implementation
+                        if (this._currentLevel) {
+                            const validator = new CircuitValidator(this._currentLevel, message.circuit);
+                            const result = await validator.validate();
+                            
+                            // Send validation result back to webview
+                            this._panel.webview.postMessage({
+                                command: 'validationResult',
+                                result: result
+                            });
+                            
+                            if (result.success) {
+                                vscode.window.showInformationMessage(
+                                    `回路が正しく動作しています！獲得スター: ${result.details?.stars}つ`
+                                );
+                            } else {
+                                vscode.window.showErrorMessage(result.message);
+                            }
+                        }
                         break;
                     case 'saveProgress':
                         // TODO: Save user progress
@@ -129,6 +147,15 @@ export class CircuitEditorPanel {
                 <div id="level-info">
                     <h2 id="level-title"></h2>
                     <p id="level-description"></p>
+                </div>
+                <div id="validation-result" style="display: none;">
+                    <h3>検証結果</h3>
+                    <div id="validation-message"></div>
+                    <div id="validation-details">
+                        <p>使用ゲート数: <span id="gate-count">0</span></p>
+                        <p>ステップ数: <span id="step-count">0</span></p>
+                        <p>獲得スター: <span id="stars">0</span>⭐</p>
+                    </div>
                 </div>
                 <div id="gate-palette">
                     <!-- Gate palette items will be added dynamically -->

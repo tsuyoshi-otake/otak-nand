@@ -27,10 +27,26 @@ interface LevelData {
     template?: CircuitData;
 }
 
+interface ValidationResult {
+    success: boolean;
+    message: string;
+    details?: {
+        gateCount: number;
+        stepCount: number;
+        stars: number;
+        failedTests?: Array<{
+            input: number[];
+            expected: number[];
+            actual: number[];
+        }>;
+    };
+}
+
 interface WebViewMessage {
     command: string;
     level?: LevelData;
     circuit?: CircuitData;
+    result?: ValidationResult;
 }
 
 // Declare vscode api
@@ -39,7 +55,7 @@ declare const vscode: {
 };
 
 class CircuitEditor {
-    private paper!: Joint.dia.Paper;
+    private paper!: any; // TODO: Fix JointJS typing
     private graph!: Joint.dia.Graph;
     private circuit?: Joint.dia.Graph;
 
@@ -75,6 +91,12 @@ class CircuitEditor {
                 case 'loadLevel': {
                     if (message.level) {
                         this.loadLevel(message.level);
+                    }
+                    break;
+                }
+                case 'validationResult': {
+                    if (message.result) {
+                        this.showValidationResult(message.result);
                     }
                     break;
                 }
@@ -120,6 +142,61 @@ class CircuitEditor {
         if (levelDescription) {
             levelDescription.textContent = level.description;
         }
+
+        // Initialize gate palette
+        this.initializeGatePalette();
+    }
+
+    private initializeGatePalette(): void {
+        const palette = document.getElementById('gate-palette');
+        if (!palette) {
+            return;
+        }
+
+        // Clear existing items
+        palette.innerHTML = '';
+
+        // Add available gates
+        const gates = [
+            { type: 'Nand', label: 'NAND' }
+        ];
+
+        gates.forEach(gate => {
+            const gateEl = document.createElement('div');
+            gateEl.className = 'gate-item';
+            gateEl.textContent = gate.label;
+            gateEl.setAttribute('data-gate-type', gate.type);
+            
+            gateEl.draggable = true;
+            gateEl.addEventListener('dragstart', (e: DragEvent) => {
+                e.dataTransfer?.setData('gateType', gate.type);
+            });
+            
+            palette.appendChild(gateEl);
+        });
+
+        // Setup drop zone
+        this.paper.el.addEventListener('dragover', (e: DragEvent) => {
+            e.preventDefault();
+        });
+
+        this.paper.el.addEventListener('drop', (e: DragEvent) => {
+            e.preventDefault();
+            const gateType = e.dataTransfer?.getData('gateType');
+            if (gateType) {
+                const rect = this.paper.el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const device = this.createDevice(`${gateType.toLowerCase()}_${Date.now()}`, {
+                    type: gateType,
+                    label: gateType
+                });
+                
+                device.position(x - 30, y - 20); // 中心に配置されるように調整
+                this.graph.addCell(device);
+            }
+        });
     }
 
     private loadCircuit(circuitData: CircuitData): void {
@@ -138,13 +215,181 @@ class CircuitEditor {
 
     private createDevice(id: string, device: { type: string; label?: string }): Joint.dia.Element {
         // Create JointJS element based on device type
+        switch (device.type) {
+            case 'Nand':
+                return this.createNandGate(id, device.label);
+            case 'Input':
+                return this.createInputPin(id, device.label);
+            case 'Output':
+                return this.createOutputPin(id, device.label);
+            default:
+                return this.createGenericGate(id, device);
+        }
+    }
+
+    private createNandGate(id: string, label?: string): Joint.dia.Element {
+        const gate = new Joint.shapes.standard.Path({
+            id: id,
+            position: { x: 100, y: 100 },
+            size: { width: 60, height: 40 },
+            attrs: {
+                body: {
+                    // NANDゲートの図形パス
+                    d: 'M 0 0 L 0 40 L 40 40 A 20 20 0 0 0 40 0 L 0 0 Z',
+                    fill: '#ffffff',
+                    stroke: '#000000',
+                    strokeWidth: 2
+                },
+                // 否定を表す小円
+                circle: {
+                    r: 5,
+                    cx: 65,
+                    cy: 20,
+                    fill: '#ffffff',
+                    stroke: '#000000',
+                    strokeWidth: 2
+                },
+                label: {
+                    text: label || 'NAND',
+                    fontSize: 12,
+                    fontFamily: 'Arial',
+                    textAnchor: 'middle',
+                    textVerticalAnchor: 'middle',
+                    x: 20,
+                    y: 20,
+                    fill: '#000000'
+                }
+            },
+            ports: {
+                groups: {
+                    in: {
+                        position: { name: 'left' },
+                        attrs: {
+                            circle: {
+                                r: 4,
+                                magnet: true,
+                                fill: '#ffffff',
+                                stroke: '#000000'
+                            }
+                        }
+                    },
+                    out: {
+                        position: { name: 'right' },
+                        attrs: {
+                            circle: {
+                                r: 4,
+                                magnet: true,
+                                fill: '#ffffff',
+                                stroke: '#000000'
+                            }
+                        }
+                    }
+                },
+                items: [
+                    { id: 'in1', group: 'in', args: { y: 10 } },
+                    { id: 'in2', group: 'in', args: { y: 30 } },
+                    { id: 'out', group: 'out', args: { y: 20 } }
+                ]
+            }
+        });
+
+        return gate;
+    }
+
+    private createInputPin(id: string, label?: string): Joint.dia.Element {
+        return new Joint.shapes.standard.Circle({
+            id: id,
+            position: { x: 50, y: 100 },
+            size: { width: 30, height: 30 },
+            attrs: {
+                body: {
+                    fill: '#ffffff',
+                    stroke: '#000000',
+                    strokeWidth: 2
+                },
+                label: {
+                    text: label || 'IN',
+                    fontSize: 12,
+                    fontFamily: 'Arial',
+                    textAnchor: 'middle',
+                    textVerticalAnchor: 'middle'
+                }
+            },
+            ports: {
+                groups: {
+                    out: {
+                        position: { name: 'right' },
+                        attrs: {
+                            circle: {
+                                r: 4,
+                                magnet: true,
+                                fill: '#ffffff',
+                                stroke: '#000000'
+                            }
+                        }
+                    }
+                },
+                items: [
+                    { id: 'out', group: 'out' }
+                ]
+            }
+        });
+    }
+
+    private createOutputPin(id: string, label?: string): Joint.dia.Element {
+        return new Joint.shapes.standard.Circle({
+            id: id,
+            position: { x: 200, y: 100 },
+            size: { width: 30, height: 30 },
+            attrs: {
+                body: {
+                    fill: '#ffffff',
+                    stroke: '#000000',
+                    strokeWidth: 2
+                },
+                label: {
+                    text: label || 'OUT',
+                    fontSize: 12,
+                    fontFamily: 'Arial',
+                    textAnchor: 'middle',
+                    textVerticalAnchor: 'middle'
+                }
+            },
+            ports: {
+                groups: {
+                    in: {
+                        position: { name: 'left' },
+                        attrs: {
+                            circle: {
+                                r: 4,
+                                magnet: true,
+                                fill: '#ffffff',
+                                stroke: '#000000'
+                            }
+                        }
+                    }
+                },
+                items: [
+                    { id: 'in', group: 'in' }
+                ]
+            }
+        });
+    }
+
+    private createGenericGate(id: string, device: { type: string; label?: string }): Joint.dia.Element {
         return new Joint.shapes.standard.Rectangle({
             id: id,
             position: { x: 100, y: 100 },
-            size: { width: 100, height: 60 },
+            size: { width: 60, height: 40 },
             attrs: {
-                body: { fill: '#ffffff', stroke: '#000000' },
-                label: { text: device.label || device.type, fill: '#000000' }
+                body: { fill: '#ffffff', stroke: '#000000', strokeWidth: 2 },
+                label: {
+                    text: device.label || device.type,
+                    fontSize: 12,
+                    fontFamily: 'Arial',
+                    textAnchor: 'middle',
+                    textVerticalAnchor: 'middle'
+                }
             }
         });
     }
@@ -196,6 +441,37 @@ class CircuitEditor {
         if (window.confirm('Are you sure you want to reset the circuit?')) {
             this.graph.clear();
             vscode.postMessage({ command: 'resetCircuit' });
+        }
+    }
+
+    private showValidationResult(result: ValidationResult): void {
+        const validationDiv = document.getElementById('validation-result');
+        const messageDiv = document.getElementById('validation-message');
+        const gateCount = document.getElementById('gate-count');
+        const stepCount = document.getElementById('step-count');
+        const stars = document.getElementById('stars');
+
+        if (validationDiv && messageDiv && gateCount && stepCount && stars) {
+            validationDiv.style.display = 'block';
+            messageDiv.textContent = result.message;
+            messageDiv.style.color = result.success ? 'green' : 'red';
+
+            if (result.details) {
+                gateCount.textContent = result.details.gateCount.toString();
+                stepCount.textContent = result.details.stepCount.toString();
+                stars.textContent = '⭐'.repeat(result.details.stars);
+            }
+
+            if (!result.success && result.details?.failedTests) {
+                const failedTestsHtml = result.details.failedTests.map(test => `
+                    <div class="failed-test">
+                        <p>入力: ${test.input.join(', ')}</p>
+                        <p>期待出力: ${test.expected.join(', ')}</p>
+                        <p>実際の出力: ${test.actual.join(', ')}</p>
+                    </div>
+                `).join('');
+                messageDiv.innerHTML += '<div class="failed-tests">' + failedTestsHtml + '</div>';
+            }
         }
     }
 }

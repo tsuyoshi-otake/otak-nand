@@ -2,7 +2,6 @@
     --primary-color: #007acc;
     --text-color: #333;
     --background-color: #fff;
-    --toolbar-height: 60px;
     --border-color: #ccc;
 }
 
@@ -14,31 +13,30 @@ body {
     color: var(--text-color);
 }
 
-/* Layout */
+/* Main Layout */
 #container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 16px;
     height: 100vh;
     width: 100vw;
-}
-
-#toolbar {
-    height: var(--toolbar-height);
-    padding: 0 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-bottom: 1px solid var(--border-color);
-    background-color: var(--background-color);
-}
-
-#circuit-container {
-    flex: 1;
     position: relative;
     overflow: hidden;
 }
 
-/* Components */
+/* Toolbar */
+#toolbar {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding: 16px;
+    background: var(--background-color);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 8px;
+    z-index: 200;
+}
+
 .button {
     padding: 8px 16px;
     border: 1px solid var(--primary-color);
@@ -64,6 +62,114 @@ body {
     opacity: 0.9;
 }
 
+/* Circuit Area */
+#circuit-container {
+    grid-column: 2;
+    grid-row: 2;
+    border: 1px solid var(--border-color);
+    background: white;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Gate Palette */
+#gate-palette {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 16px;
+    background: var(--background-color);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gate-item {
+    padding: 12px;
+    border: 2px solid var(--primary-color);
+    border-radius: 4px;
+    background: white;
+    cursor: move;
+    user-select: none;
+    text-align: center;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.gate-item:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Level Information */
+#level-info {
+    position: fixed;
+    top: 80px;
+    right: 16px;
+    padding: 16px;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    width: 300px;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#level-title {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+#level-description {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Validation Result */
+#validation-result {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    padding: 16px;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    width: 300px;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#validation-message {
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+#validation-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.failed-tests {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+.failed-test {
+    background-color: rgba(255, 0, 0, 0.1);
+    padding: 8px;
+    margin: 4px 0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.failed-test p {
+    margin: 4px 0;
+}
+
 /* Circuit Elements */
 .joint-element {
     cursor: move;
@@ -83,54 +189,16 @@ body {
     fill: #005999;
 }
 
-/* Level Information */
-#level-info {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    padding: 16px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    max-width: 300px;
-    z-index: 100;
+/* Responsive Design */
+@media (max-width: 1200px) {
+    #level-info,
+    #validation-result {
+        width: 250px;
+    }
 }
 
-#level-title {
-    margin: 0 0 8px 0;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-#level-description {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-/* Gate Palette */
-#gate-palette {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 8px;
-    z-index: 100;
-}
-
-.gate-item {
-    padding: 8px;
-    margin: 4px 0;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    cursor: move;
-    user-select: none;
-    background-color: var(--background-color);
-}
-
-.gate-item:hover {
-    background-color: #f5f5f5;
+@media (max-width: 800px) {
+    #container {
+        grid-template-columns: 150px 1fr;
+    }
 }

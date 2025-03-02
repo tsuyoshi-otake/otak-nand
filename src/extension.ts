@@ -8,8 +8,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Register commands
     let startGameCommand = vscode.commands.registerCommand('otak-nand.startGame', () => {
-        CircuitEditorPanel.createOrShow(context.extensionPath);
-        vscode.window.showInformationMessage('Welcome to NAND Game!');
+        CircuitEditorPanel.createOrShow(context.extensionPath, Level1);
+        vscode.window.showInformationMessage('NANDゲームへようこそ！最初のレベルを開始します。');
     });
 
     let openLevelCommand = vscode.commands.registerCommand('otak-nand.openLevel', async (levelArg?: LevelDefinition) => {

@@ -25,6 +25,7 @@ declare module '@joint/core' {
                 color: string;
             };
         });
+        el: HTMLElement;  // DOMエレメントへの参照を追加
     }
 
     export class Device {
