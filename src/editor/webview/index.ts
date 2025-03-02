@@ -155,6 +155,25 @@ class CircuitEditor {
             if (container) {
                 this.paper.setDimensions(container.clientWidth, container.clientHeight);
                 this.paper.drawGrid();
+
+                // 入力/出力ピンの位置を再計算
+                const startY = 120;
+                let inputY = startY;
+                let outputY = startY;
+                
+                this.graph.getElements().forEach((element: any) => {
+                    const elementType = element.get('type');
+                    if (elementType === 'standard.Circle') {
+                        const label = element.attr('label/text');
+                        if (label === 'IN') {
+                            element.position(20, inputY);
+                            inputY += 60;
+                        } else if (label === 'OUT') {
+                            element.position(window.innerWidth - 320, outputY);
+                            outputY += 60;
+                        }
+                    }
+                });
             }
         });
 
@@ -287,7 +306,7 @@ class CircuitEditor {
             // 最小化機能を実装
             header.addEventListener('click', () => {
                 levelInfo.classList.toggle('minimized');
-                minimizeBtn.innerHTML = levelInfo.classList.contains('minimized') ? '▲' : '▼';
+                minimizeBtn.innerHTML = levelInfo.classList.contains('minimized') ? '▼' : '▲';
             });
         }
 
@@ -348,9 +367,29 @@ class CircuitEditor {
     }
 
     private loadCircuit(circuitData: CircuitData): void {
+        const startY = 120; // ツールバーの下から開始
+        let inputY = startY;
+        let outputY = startY;
+
+        // 入力/出力デバイスを先に取り出して数を数える
+        const inputs = Object.entries(circuitData.devices).filter(([_, d]) => d.type === 'Input');
+        const outputs = Object.entries(circuitData.devices).filter(([_, d]) => d.type === 'Output');
+
+        // ピン間の間隔を計算（最小60px）
+        const spacing = Math.max(60, (window.innerHeight - startY - 100) / Math.max(inputs.length, outputs.length));
+
         // Create devices
         Object.entries(circuitData.devices).forEach(([id, device]) => {
             const element = this.createDevice(id, device);
+            
+            if (device.type === 'Input') {
+                element.position(20, inputY);
+                inputY += spacing;
+            } else if (device.type === 'Output') {
+                element.position(window.innerWidth - 320, outputY); // Level Infoの左側に配置
+                outputY += spacing;
+            }
+            
             this.graph.addCell(element);
         });
 
@@ -494,7 +533,7 @@ class CircuitEditor {
     private createInputPin(id: string, label?: string): Joint.dia.Element {
         return new Joint.shapes.standard.Circle({
             id: id,
-            position: { x: 50, y: 100 },
+            position: { x: 10, y: 100 },
             size: { width: 30, height: 30 },
             attrs: {
                 body: {
