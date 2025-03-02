@@ -90,7 +90,7 @@ body {
     border: 1px solid var(--primary-color);
     border-radius: 4px;
     background-color: var(--background-color);
-    color: var(--primary-color);
+    color: var(--text-color);
     cursor: pointer;
     font-size: 14px;
     transition: all 0.2s ease;
@@ -163,7 +163,7 @@ body {
 /* Level Information */
 #level-info {
     position: fixed;
-    top: 80px;
+    top: 100px;
     right: 16px;
     padding: 16px;
     background-color: var(--background-color);
@@ -172,6 +172,83 @@ body {
     width: 300px;
     z-index: 100;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Markdown support for level-info */
+#level-info .markdown-content {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#level-info .markdown-content h1,
+#level-info .markdown-content h2,
+#level-info .markdown-content h3,
+#level-info .markdown-content h4,
+#level-info .markdown-content h5,
+#level-info .markdown-content h6 {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    line-height: 1.25;
+}
+
+#level-info .markdown-content h1 { font-size: 20px; }
+#level-info .markdown-content h2 { font-size: 18px; }
+#level-info .markdown-content h3 { font-size: 16px; }
+#level-info .markdown-content h4 { font-size: 14px; }
+
+#level-info .markdown-content p {
+    margin: 8px 0;
+}
+
+#level-info .markdown-content ul,
+#level-info .markdown-content ol {
+    margin: 8px 0;
+    padding-left: 24px;
+}
+
+#level-info .markdown-content li {
+    margin: 4px 0;
+}
+
+#level-info .markdown-content code {
+    padding: 2px 4px;
+    background: var(--alternate-row);
+    border-radius: 3px;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+#level-info .markdown-content pre {
+    padding: 12px;
+    background: var(--alternate-row);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+#level-info .markdown-content pre code {
+    padding: 0;
+    background: none;
+}
+
+#level-info .markdown-content blockquote {
+    margin: 8px 0;
+    padding-left: 12px;
+    border-left: 4px solid var(--border-color);
+    color: var(--text-color);
+}
+
+#level-info .markdown-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+#level-info .markdown-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+#level-info .markdown-content a:hover {
+    text-decoration: underline;
 }
 
 #level-title {
@@ -184,6 +261,78 @@ body {
     margin: 0;
     font-size: 14px;
     line-height: 1.5;
+}
+
+/* Markdown styles for level-description */
+#level-description h1,
+#level-description h2,
+#level-description h3,
+#level-description h4,
+#level-description h5,
+#level-description h6 {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    line-height: 1.25;
+}
+
+#level-description h1 { font-size: 20px; }
+#level-description h2 { font-size: 18px; }
+#level-description h3 { font-size: 16px; }
+#level-description h4 { font-size: 14px; }
+
+#level-description p {
+    margin: 8px 0;
+}
+
+#level-description ul,
+#level-description ol {
+    margin: 8px 0;
+    padding-left: 24px;
+}
+
+#level-description li {
+    margin: 4px 0;
+}
+
+#level-description code {
+    padding: 2px 4px;
+    background: var(--alternate-row);
+    border-radius: 3px;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+#level-description pre {
+    padding: 12px;
+    background: var(--alternate-row);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+#level-description pre code {
+    padding: 0;
+    background: none;
+}
+
+#level-description blockquote {
+    margin: 8px 0;
+    padding-left: 12px;
+    border-left: 4px solid var(--border-color);
+    color: var(--text-color);
+}
+
+#level-description img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+#level-description a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+#level-description a:hover {
+    text-decoration: underline;
 }
 
 /* Validation Result */
