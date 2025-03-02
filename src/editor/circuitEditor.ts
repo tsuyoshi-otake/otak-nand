@@ -145,6 +145,7 @@ export class CircuitEditorPanel {
             <div id="container">
                 <div id="toolbar">
                     <button class="button" id="paletteBtn">Show Gates</button>
+                    <button class="button" id="themeBtn">🌓 Theme</button>
                     <button class="button primary" id="validateBtn">Validate Circuit</button>
                     <button class="button" id="resetBtn">Reset</button>
                     <button class="button" id="helpBtn">Help</button>

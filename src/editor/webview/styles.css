@@ -1,8 +1,31 @@
 :root {
+    /* Light theme */
     --primary-color: #007acc;
-    --text-color: #333;
-    --background-color: #fff;
-    --border-color: #ccc;
+    --text-color-light: #333;
+    --background-color-light: #fff;
+    --border-color-light: #ccc;
+    
+    /* Dark theme */
+    --text-color-dark: #fff;
+    --background-color-dark: #252526;
+    --border-color-dark: #454545;
+
+    /* Default theme (will be switched) */
+    --text-color: var(--text-color-dark);
+    --background-color: var(--background-color-dark);
+    --border-color: var(--border-color-dark);
+}
+
+body.theme-light {
+    --text-color: var(--text-color-light);
+    --background-color: var(--background-color-light);
+    --border-color: var(--border-color-light);
+}
+
+body.theme-dark {
+    --text-color: var(--text-color-dark);
+    --background-color: var(--background-color-dark);
+    --border-color: var(--border-color-dark);
 }
 
 body {
@@ -75,7 +98,7 @@ body {
 /* Gate Palette */
 #gate-palette {
     position: fixed;
-    top: 60px;  /* ツールバーの高さ分下げる */
+    top: 80px;  /* ツールバーとマージンの分下げる */
     left: 16px;
     padding: 16px;
     background: var(--background-color);
@@ -178,6 +201,49 @@ body {
 
 .failed-test p {
     margin: 4px 0;
+}
+
+/* Test Results Table */
+.test-results {
+    margin: 16px 0;
+}
+
+.test-results table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--background-color);
+    border: 1px solid var(--border-color);
+}
+
+.test-results th,
+.test-results td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.test-results th {
+    background: var(--primary-color);
+    color: white;
+    font-weight: bold;
+}
+
+.test-results tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.circuit-stats {
+    margin-top: 16px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+.stars {
+    font-size: 1.2em;
+    color: gold;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+    margin: 8px 0;
 }
 
 /* Circuit Elements */

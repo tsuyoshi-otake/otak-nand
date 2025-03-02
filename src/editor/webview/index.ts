@@ -21,10 +21,22 @@ interface CircuitData {
     }[];
 }
 
+interface TestCase {
+    input: number[];
+    output: number[];
+}
+
+interface LevelRequirements {
+    inputs: number;
+    outputs: number;
+    testCases: TestCase[];
+}
+
 interface LevelData {
     title: string;
     description: string;
     template?: CircuitData;
+    requirements: LevelRequirements;
 }
 
 interface ValidationResult {
@@ -54,10 +66,55 @@ declare const vscode: {
     postMessage: (message: any) => void;
 };
 
+interface CircuitStyle {
+    background: string;
+    stroke: string;
+    fill: string;
+    text: string;
+}
+
 class CircuitEditor {
     private paper!: any; // TODO: Fix JointJS typing
     private graph!: Joint.dia.Graph;
     private circuit?: Joint.dia.Graph;
+    private _currentLevel?: LevelData;
+
+    private updateCircuitStyle(style: CircuitStyle): void {
+        // 背景色の更新
+        this.paper.drawBackground({ color: style.background });
+
+        // 既存の要素のスタイル更新
+        this.graph.getElements().forEach(element => {
+            element.attr({
+                body: {
+                    fill: style.fill,
+                    stroke: style.stroke
+                },
+                label: {
+                    fill: style.text
+                },
+                circle: {
+                    fill: style.fill,
+                    stroke: style.stroke
+                }
+            });
+        });
+
+        // リンクのスタイル更新
+        this.graph.getLinks().forEach(link => {
+            link.attr('line/stroke', style.stroke);
+        });
+
+        // ゲートパレットのスタイル更新
+        const gateItems = document.querySelectorAll('.gate-item');
+        gateItems.forEach(item => {
+            if (item instanceof HTMLElement) {
+                item.style.backgroundColor = style.fill;
+                item.style.color = style.text;
+                item.style.borderColor = style.stroke;
+            }
+        });
+    }
 
     constructor() {
         this.initializeUI();
@@ -79,7 +136,15 @@ class CircuitEditor {
             height: container.clientHeight,
             gridSize: 10,
             drawGrid: true,
-            background: { color: 'white' }
+            background: { color: '#252526' }
+        });
+
+        // 初期ダークテーマスタイルを適用
+        this.updateCircuitStyle({
+            background: '#252526',
+            stroke: '#ffffff',
+            fill: '#252526',
+            text: '#ffffff'
         });
     }
 
@@ -107,11 +172,46 @@ class CircuitEditor {
         const validateBtn = document.getElementById('validateBtn');
         if (validateBtn) {
             validateBtn.addEventListener('click', () => {
+                console.log('Validate button clicked');
                 const circuit = this.getCircuitData();
+                console.log('Circuit data:', circuit);
                 vscode.postMessage({
                     command: 'validateCircuit',
                     circuit
                 });
+                console.log('Validation request sent');
+            });
+        }
+
+        // Theme toggle button
+        const themeBtn = document.getElementById('themeBtn');
+        if (themeBtn) {
+            // デフォルトはダークテーマ
+            document.body.classList.add('theme-dark');
+            themeBtn.addEventListener('click', () => {
+                if (document.body.classList.contains('theme-dark')) {
+                    document.body.classList.remove('theme-dark');
+                    document.body.classList.add('theme-light');
+                    themeBtn.textContent = '🌞 Theme';
+                    // ライトテーマ用のスタイル
+                    this.updateCircuitStyle({
+                        background: '#ffffff',
+                        stroke: '#000000',
+                        fill: '#ffffff',
+                        text: '#333333'
+                    });
+                } else {
+                    document.body.classList.remove('theme-light');
+                    document.body.classList.add('theme-dark');
+                    themeBtn.textContent = '🌓 Theme';
+                    // ダークテーマ用のスタイル
+                    this.updateCircuitStyle({
+                        background: '#252526',
+                        stroke: '#ffffff',
+                        fill: '#252526',
+                        text: '#ffffff'
+                    });
+                }
             });
         }
 
@@ -290,34 +390,81 @@ class CircuitEditor {
             ports: {
                 groups: {
                     in: {
-                        position: { name: 'left' },
+                        position: { name: 'absolute' },
                         attrs: {
                             circle: {
                                 r: 4,
-                                magnet: true,
+                                magnet: 'passive',
                                 fill: '#ffffff',
-                                stroke: '#000000'
+                                stroke: '#000000',
+                                strokeWidth: 2
+                            },
+                            text: {
+                                fontSize: 10,
+                                fill: '#000000'
                             }
+                        },
+                        label: {
+                            position: 'left',
+                            markup: '<text/>'
                         }
                     },
                     out: {
-                        position: { name: 'right' },
+                        position: { name: 'absolute' },
                         attrs: {
                             circle: {
                                 r: 4,
                                 magnet: true,
                                 fill: '#ffffff',
-                                stroke: '#000000'
+                                stroke: '#000000',
+                                strokeWidth: 2
+                            },
+                            text: {
+                                fontSize: 10,
+                                fill: '#000000'
                             }
+                        },
+                        label: {
+                            position: 'right',
+                            markup: '<text/>'
                         }
                     }
                 },
                 items: [
-                    { id: 'in1', group: 'in', args: { y: 10 } },
-                    { id: 'in2', group: 'in', args: { y: 30 } },
-                    { id: 'out', group: 'out', args: { y: 20 } }
+                    {
+                        id: 'in1',
+                        group: 'in',
+                        args: { x: 0, y: 10 },
+                        attrs: { text: { text: 'in1' } }
+                    },
+                    {
+                        id: 'in2',
+                        group: 'in',
+                        args: { x: 0, y: 30 },
+                        attrs: { text: { text: 'in2' } }
+                    },
+                    {
+                        id: 'out',
+                        group: 'out',
+                        args: { x: 60, y: 20 },
+                        attrs: { text: { text: 'out' } }
+                    }
                 ]
-            }
+            },
+            markup: [
+                {
+                    tagName: 'path',
+                    selector: 'body'
+                },
+                {
+                    tagName: 'circle',
+                    selector: 'output-bubble'
+                },
+                {
+                    tagName: 'text',
+                    selector: 'label'
+                }
+            ]
         });
 
         return gate;
@@ -497,25 +644,40 @@ class CircuitEditor {
 
         if (validationDiv && messageDiv && gateCount && stepCount && stars) {
             validationDiv.style.display = 'block';
-            messageDiv.textContent = result.message;
+            // テーブル形式で入出力を表示
+            const testCasesHtml = this._currentLevel?.requirements.testCases.map((testCase, index) => `
+                <tr>
+                    <td>${testCase.input.join(', ')}</td>
+                    <td>${testCase.output.join(', ')}</td>
+                    <td>${result.success ? '✔' :
+                        (result.details?.failedTests?.some(test =>
+                            test.input.join(',') === testCase.input.join(',')) ? '✘' : '✔')}</td>
+                </tr>
+            `).join('') || '';
+
+            const resultHtml = `
+                <div class="test-results">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Input</th>
+                                <th>Output</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${testCasesHtml}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="circuit-stats">
+                    <p>${result.details?.gateCount || 0} components used. ${result.details?.gateCount || 0} nand gates in total.</p>
+                    ${result.success ? `<p class="stars">${'⭐'.repeat(result.details?.stars || 0)}</p>` : ''}
+                </div>
+            `;
+
+            messageDiv.innerHTML = resultHtml;
             messageDiv.style.color = result.success ? 'green' : 'red';
-
-            if (result.details) {
-                gateCount.textContent = result.details.gateCount.toString();
-                stepCount.textContent = result.details.stepCount.toString();
-                stars.textContent = '⭐'.repeat(result.details.stars);
-            }
-
-            if (!result.success && result.details?.failedTests) {
-                const failedTestsHtml = result.details.failedTests.map(test => `
-                    <div class="failed-test">
-                        <p>入力: ${test.input.join(', ')}</p>
-                        <p>期待出力: ${test.expected.join(', ')}</p>
-                        <p>実際の出力: ${test.actual.join(', ')}</p>
-                    </div>
-                `).join('');
-                messageDiv.innerHTML += '<div class="failed-tests">' + failedTestsHtml + '</div>';
-            }
         }
     }
 }
