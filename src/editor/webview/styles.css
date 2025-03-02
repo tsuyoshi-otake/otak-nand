@@ -237,10 +237,6 @@ body.theme-dark .gate-item {
     display: none;
 }
 
-#level-info.minimized .minimize-button {
-    transform: rotate(180deg);
-}
-
 /* Markdown support for level-info */
 #level-info .markdown-content {
     font-size: 14px;
@@ -319,7 +315,7 @@ body.theme-dark .gate-item {
 }
 
 #level-title {
-    margin: 0 0 8px 0;
+    margin: 0;
     font-size: 14px;
     font-weight: 600;
 }
