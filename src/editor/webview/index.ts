@@ -150,6 +150,22 @@ class CircuitEditor {
             background: { color: initialStyle.background }
         });
 
+        // リサイズイベントのハンドリング
+        window.addEventListener('resize', () => {
+            if (container) {
+                this.paper.setDimensions(container.clientWidth, container.clientHeight);
+                this.paper.drawGrid();
+            }
+        });
+
+        // 初回描画時にもサイズを設定
+        setTimeout(() => {
+            if (container) {
+                this.paper.setDimensions(container.clientWidth, container.clientHeight);
+                this.paper.drawGrid();
+            }
+        }, 0);
+
         // 初期テーマスタイルを適用
         this.updateCircuitStyle(initialStyle);
     }
@@ -195,7 +211,7 @@ class CircuitEditor {
             // ローカルストレージからテーマを取得
             const savedTheme = localStorage.getItem('theme') || 'dark';
             document.body.classList.add(`theme-${savedTheme}`);
-            themeBtn.textContent = savedTheme === 'dark' ? '🌓 Theme' : ' Theme';
+            themeBtn.textContent = savedTheme === 'dark' ? 'Dark' : 'Light';
 
             // 初期テーマスタイルを適用
             this.updateCircuitStyle(this.getCircuitStyleForTheme(savedTheme));
@@ -222,32 +238,6 @@ class CircuitEditor {
             });
         }
 
-        // パレットの表示/非表示を切り替えるボタン
-        const paletteBtn = document.getElementById('paletteBtn');
-        const gatePalette = document.getElementById('gate-palette');
-        if (paletteBtn && gatePalette) {
-            // 初期状態は非表示
-            gatePalette.classList.add('hidden');
-            
-            paletteBtn.addEventListener('click', () => {
-                console.log('Show/Hide Gates button clicked');
-                if (gatePalette) {
-                    console.log('Current palette classes:', gatePalette.className);
-                    if (gatePalette.classList.contains('visible')) {
-                        console.log('Hiding palette');
-                        gatePalette.classList.remove('visible');
-                        gatePalette.classList.add('hidden');
-                        paletteBtn.textContent = 'Show Gates';
-                    } else {
-                        console.log('Showing palette');
-                        gatePalette.classList.remove('hidden');
-                        gatePalette.classList.add('visible');
-                        paletteBtn.textContent = 'Hide Gates';
-                    }
-                    console.log('Updated palette classes:', gatePalette.className);
-                }
-            });
-        }
     }
 
     private loadLevel(level: LevelData): void {
@@ -698,7 +688,7 @@ class CircuitEditor {
     private setTheme(theme: string, button: HTMLElement): void {
         document.body.classList.remove('theme-light', 'theme-dark');
         document.body.classList.add(`theme-${theme}`);
-        button.textContent = theme === 'dark' ? '🌓 Theme' : '🌞 Theme';
+        button.textContent = theme === 'dark' ? 'Dark' : 'Light';
         localStorage.setItem('theme', theme);
         this.updateCircuitStyle(this.getCircuitStyleForTheme(theme));
     }
