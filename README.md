@@ -1,71 +1,155 @@
-# otak-nand README
-
-This is the README for your extension "otak-nand". After writing up a brief description, we recommend including the following sections.
-
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+<p align="center">
+  <h1 align="center">otak-nand</h1>
+  <p align="center">An educational digital circuit puzzle game for VS Code - Build complex logic circuits starting from NAND gates.</p>
+</p>
 
 ---
 
-## Following extension guidelines
+## Usage
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+![NAND Game in Action](images/icon.png)
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+1. Open any workspace in VS Code
+2. Access the NAND game interface from the editor
+3. Start building circuits using NAND gates
+4. Progress through increasingly complex challenges
 
-## Working with Markdown
+## Features
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+otak-nand is an interactive VS Code extension that teaches digital circuit design through hands-on puzzle solving.
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+### Key Features
 
-## For more information
+- **Progressive Learning Path**:
+  - Start with basic NAND gates
+  - Build increasingly complex circuits
+  - Learn fundamental digital logic concepts
+  - Work towards processor construction
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+- **Interactive Circuit Building**:
+  - Drag and drop interface
+  - Real-time circuit simulation
+  - Visual signal flow
+  - Immediate feedback
 
-**Enjoy!**
+- **Structured Learning Stages**:
+
+#### Stage 1: Logic Gates
+- NAND gate fundamentals
+- NOT gate implementation
+- AND gate construction
+- OR gate design
+- XOR gate creation
+
+#### Stage 2: Arithmetics
+- Half Adder development
+- Full Adder implementation
+- Multi-bit Adder construction
+- Increment circuit design
+- Subtraction implementation
+- Zero comparison
+- Negative number detection
+
+#### Stage 3: Switching
+- Selector circuits
+- Switch implementation
+- Arithmetic Logic Unit (ALU)
+- Logic Unit design
+- Arithmetic Unit construction
+- ALU optimization
+- Condition handling
+
+#### Stage 4: Memory
+- SR Latch design
+- D Latch implementation
+- Data Flip-Flop creation
+- Register construction
+- Counter development
+- RAM implementation
+
+#### Stage 5: Processor
+- Memory integration
+- ALU instruction handling
+- Control selection
+- Control Unit design
+- Computer architecture
+- I/O handling
+
+- **Game Mechanics**:
+  - ⭐️ Star rating system based on:
+    - Minimum gate count
+    - Minimum step count
+    - Circuit efficiency
+  - Achievement tracking
+  - Circuit validation
+  - Progress monitoring
+
+- **Visual Interface**:
+  - WebView-based circuit editor
+  - Intuitive drag & drop controls
+  - Real-time signal visualization
+  - Progress tracking sidebar
+  - Comprehensive tutorial system
+
+## Requirements
+
+- Visual Studio Code ^1.90.0
+- No additional dependencies required
+
+## Installation
+
+1. Install through VS Code Marketplace
+2. Open VS Code
+3. Start building circuits using NAND gates
+4. Progress through the learning stages
+
+## Implementation Details
+
+- **Circuit Validation**:
+  - Automated test pattern verification
+  - Real-time simulation feedback
+  - Efficiency metrics calculation
+  - Progress tracking
+
+- **Tutorial System**:
+  - Interactive guidance
+  - Step-by-step instructions
+  - Visual demonstrations
+  - Contextual help
+
+- **Progress Tracking**:
+  - Persistent save system
+  - Achievement monitoring
+  - Star ratings
+  - Level progression
+
+## Related Extensions
+
+### [otak-monitor](https://marketplace.visualstudio.com/items?itemName=odangoo.otak-monitor)
+Track system resources in VS Code with real-time monitoring of CPU, memory, and disk usage.
+
+### [otak-proxy](https://marketplace.visualstudio.com/items?itemName=odangoo.otak-proxy)
+Simplify proxy configuration in VS Code with one-click setup for different network environments.
+
+### [otak-committer](https://marketplace.visualstudio.com/items?itemName=odangoo.otak-committer)
+AI-powered commit message generation supporting 25 languages and smart SCM operations.
+
+### [otak-restart](https://marketplace.visualstudio.com/items?itemName=odangoo.otak-restart)
+Quick restart tools for VS Code Extension Host and window via status bar.
+
+### [otak-clock](https://marketplace.visualstudio.com/items?itemName=odangoo.otak-clock)
+Dual time zone clock display for international development teams.
+
+### [otak-pomodoro](https://marketplace.visualstudio.com/items?itemName=odangoo.otak-pomodoro)
+Productivity timer implementing the Pomodoro Technique for balanced work sessions.
+
+### [otak-zen](https://marketplace.visualstudio.com/items?itemName=odangoo.otak-zen)
+Distraction-free coding environment with customizable UI element visibility.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+For more information, visit the [GitHub repository](https://github.com/tsuyoshi-otake/otak-nand).

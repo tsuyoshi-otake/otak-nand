@@ -89,13 +89,18 @@ body {
 }
 
 .button {
-    padding: 8px 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    padding: 0 16px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
     background-color: var(--background-color);
     color: var(--text-color);
     cursor: pointer;
     font-size: 14px;
+    line-height: 1;
     transition: all 0.2s ease;
 }
 
@@ -557,7 +562,7 @@ body.theme-light #level-info {
     position: fixed;
     bottom: 16px;
     right: 16px;
-    width: 300px;
+    width: 400px;
     height: auto;
     padding: 16px;
     background-color: var(--background-color);
@@ -565,4 +570,74 @@ body.theme-light #level-info {
     border-radius: 4px;
     z-index: 100;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Signal Matrix Table */
+.signal-matrix {
+    width: 100%;
+    margin-top: 16px;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.signal-matrix th,
+.signal-matrix td {
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    text-align: center;
+}
+
+.signal-matrix th {
+    background-color: var(--alternate-row);
+    font-weight: bold;
+}
+
+.signal-matrix td {
+    font-family: monospace;
+}
+
+/* Signal States */
+.signal-state {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+.signal-high {
+    background-color: rgba(0, 255, 0, 0.2);
+    color: #00aa00;
+}
+
+.signal-low {
+    background-color: rgba(255, 0, 0, 0.2);
+    color: #aa0000;
+}
+
+/* Test Result Indicators */
+.test-status {
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 3px;
+}
+
+.test-pass {
+    background-color: rgba(0, 255, 0, 0.1);
+    color: #00aa00;
+}
+
+.test-fail {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: #aa0000;
+}
+
+/* Matrix Header */
+.matrix-header {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: bold;
 }
