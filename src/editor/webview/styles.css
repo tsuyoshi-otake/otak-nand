@@ -167,9 +167,14 @@ body.theme-dark .gate-item {
 /* Level Information */
 #level-info {
     position: fixed;
-    top: 60px;
+    top: 100px;
     right: 16px;
-    background-color: var(--background-color);
+    background-color: rgba(37, 37, 38, 0.8);
+    backdrop-filter: blur(2px);
+}
+
+body.theme-light #level-info {
+    background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid var(--border-color);
     border-radius: 4px;
     width: 240px;
@@ -487,6 +492,33 @@ body.theme-dark .gate-item {
 /* Circuit Elements */
 .joint-element {
     cursor: move;
+}
+
+.delete-button {
+    display: none;
+    position: absolute;
+    right: -8px;
+    top: -8px;
+    width: 16px;
+    height: 16px;
+    background: var(--error-background);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    color: var(--text-color);
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.joint-element:hover .delete-button {
+    display: block;
+}
+
+.delete-button:hover {
+    background-color: #ff4444;
+    color: #ffffff;
 }
 
 .joint-link {

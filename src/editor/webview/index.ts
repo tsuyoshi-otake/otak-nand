@@ -187,6 +187,18 @@ class CircuitEditor {
 
         // 初期テーマスタイルを適用
         this.updateCircuitStyle(initialStyle);
+
+        // 削除ボタンのクリックイベントを設定
+        this.paper.on('cell:pointerclick', (cellView: any, evt: MouseEvent) => {
+            const target = evt.target as HTMLElement;
+            if (target.closest('.delete-button')) {
+                const cell = cellView.model;
+                if (cell.get('type') === 'standard.Path') {  // NANDゲートの場合のみ
+                    cell.remove();
+                }
+                evt.stopPropagation();
+            }
+        });
     }
 
     private setupEventListeners(): void {
@@ -523,6 +535,25 @@ class CircuitEditor {
                 {
                     tagName: 'text',
                     selector: 'label'
+                },
+                {
+                    tagName: 'foreignObject',
+                    className: 'delete-button',
+                    selector: 'delete-button',
+                    attributes: {
+                        'width': '16',
+                        'height': '16',
+                        'x': '50',
+                        'y': '-8'
+                    },
+                    children: [{
+                        tagName: 'body',
+                        namespaceURI: 'http://www.w3.org/1999/xhtml',
+                        children: [{
+                            tagName: 'div',
+                            textContent: '×'
+                        }]
+                    }]
                 }
             ]
         });
