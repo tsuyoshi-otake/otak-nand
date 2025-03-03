@@ -7,8 +7,6 @@
 
 ## Usage
 
-![NAND Game in Action](images/icon.png)
-
 1. Open any workspace in VS Code
 2. Access the NAND game interface from the editor
 3. Start building circuits using NAND gates
@@ -76,7 +74,7 @@ otak-nand is an interactive VS Code extension that teaches digital circuit desig
 - I/O handling
 
 - **Game Mechanics**:
-  - ⭐️ Star rating system based on:
+  - Star rating system based on:
     - Minimum gate count
     - Minimum step count
     - Circuit efficiency

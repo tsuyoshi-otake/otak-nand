@@ -4,6 +4,10 @@
   "description": "This is a game where you can tackle various digital circuit puzzles and challenges by leveraging basic logic gates such as AND, OR, NOT, and XOR—not limited to just one type of gate. In each level, you learn the principles of circuit design and how they operate intuitively by devising the right combination of gates to meet the given challenge and assembling the circuit.",
   "icon": "images/icon.png",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsuyoshi-otake/otak-nand"
+  },
   "engines": {
     "vscode": "^1.97.0"
   },
