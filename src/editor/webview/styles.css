@@ -178,7 +178,7 @@ body.theme-light #level-info {
     border: 1px solid var(--border-color);
     border-radius: 4px;
     width: 280px;
-    height: 400px;
+    max-height: 400px;
     z-index: 100;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
