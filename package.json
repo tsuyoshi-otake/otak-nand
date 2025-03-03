@@ -3,13 +3,17 @@
   "displayName": "otak-nand",
   "description": "This is a game where you can tackle various digital circuit puzzles and challenges by leveraging basic logic gates such as AND, OR, NOT, and XOR—not limited to just one type of gate. In each level, you learn the principles of circuit design and how they operate intuitively by devising the right combination of gates to meet the given challenge and assembling the circuit.",
   "icon": "images/icon.png",
-  "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tsuyoshi-otake/otak-nand"
+    "url": "https://github.com/tsuyoshi-otake/otak-monitor"
   },
+  "bugs": {
+    "url": "https://github.com/tsuyoshi-otake/otak-monitor/issues"
+  },
+  "homepage": "https://github.com/tsuyoshi-otake/otak-monitor#readme",
+  "version": "1.0.0",
   "engines": {
-    "vscode": "^1.97.0"
+    "vscode": "^1.90.0"
   },
   "categories": [
     "Other",
@@ -79,7 +83,7 @@
     "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
-    "@types/vscode": "^1.97.0",
+    "@types/vscode": "^1.90.0",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
     "@typescript-eslint/parser": "^8.22.0",
     "@vscode/test-cli": "^0.0.10",
