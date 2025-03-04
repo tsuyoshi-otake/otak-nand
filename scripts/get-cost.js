@@ -1,8 +1,5 @@
 // Monthly cost data fetcher using AWS Cost Explorer
-const { CostExplorerClient, GetCostAndUsageCommand } = require('@aws-sdk/client-cost-explorer');
-
-const targetYear = 2025;
-const targetMonth = 3;
+import { CostExplorerClient, GetCostAndUsageCommand } from '@aws-sdk/client-cost-explorer';
 
 // AWS Account configuration
 const AWS_ACCOUNT_ID = '073848713973'; // GitHubに保存されているアカウントID
@@ -53,6 +50,11 @@ async function fetchMonthlyCost(year, month) {
         throw new Error(`Failed to fetch cost data: ${error.message}`);
     }
 }
+
+// Get the current date for default values
+const now = new Date();
+const targetYear = process.env.TARGET_YEAR || now.getFullYear();
+const targetMonth = process.env.TARGET_MONTH || now.getMonth() + 1;
 
 async function main() {
     try {
