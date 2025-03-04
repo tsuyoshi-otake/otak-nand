@@ -75,6 +75,8 @@
     "test": "vscode-test"
   },
   "dependencies": {
+    "@aws-sdk/client-cost-explorer": "^3.515.0",
+    "@aws-sdk/credential-providers": "^3.515.0",
     "digitaljs": "^0.13.1",
     "jointjs": "^3.7.7",
     "lodash": "^4.17.21"
