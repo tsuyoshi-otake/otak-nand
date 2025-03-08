@@ -72,7 +72,7 @@ class LevelsTreeProvider implements vscode.TreeDataProvider<LevelTreeItem> {
         if (!element) {
             // Root level - return stages
             return Promise.resolve(
-                Stages.map(stage => new LevelTreeItem(
+                Stages.map((stage: Stage) => new LevelTreeItem(
                     stage.title,
                     stage.description,
                     vscode.TreeItemCollapsibleState.Expanded,
