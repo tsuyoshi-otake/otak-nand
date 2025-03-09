@@ -9,25 +9,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- 基本的な回路エディタの実装
-- NANDゲートの配置と接続機能
-- ダークテーマ/ライトテーマの切り替え機能
-- 回路の検証機能
-- レベル情報の表示機能
-- 基本的なUI（ツールバー、ゲートパレット、検証結果表示）
+- Basic circuit editor implementation
+- NAND gate placement and connection functionality
+- Dark/Light theme switching
+- Circuit validation system
+- Level information display
+- Core UI components (toolbar, gate palette, validation results)
 
 ### Changed
 
-- 接続線の表示をシンプルな線のみに変更（矢印を削除）
+- Simplified connection lines by removing arrows
+- Improved connection rendering system
 
 ### Fixed
 
-- 接続線のスタイリングの問題を修正
-- テーマ切り替え時のスタイル適用の問題を修正
+- Connection line styling issues
+- Theme switching style application issues
 
 ## [Unreleased]
 
-- ステージ2以降のレベル実装
-- 回路の保存/読み込み機能
-- ヘルプ機能の実装
-- チュートリアルの実装
+- Stage 2 and beyond level implementations
+- Circuit save/load functionality
+- Help system implementation
+- Tutorial system implementation
