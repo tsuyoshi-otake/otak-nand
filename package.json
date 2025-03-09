@@ -5,13 +5,13 @@
   "icon": "images/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tsuyoshi-otake/otak-monitor"
+    "url": "https://github.com/tsuyoshi-otake/otak-nand"
   },
   "bugs": {
-    "url": "https://github.com/tsuyoshi-otake/otak-monitor/issues"
+    "url": "https://github.com/tsuyoshi-otake/otak-nand/issues"
   },
-  "homepage": "https://github.com/tsuyoshi-otake/otak-monitor#readme",
-  "version": "1.0.0",
+  "homepage": "https://github.com/tsuyoshi-otake/otak-nand#readme",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.90.0"
   },
