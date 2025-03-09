@@ -535,17 +535,32 @@ body.theme-light #level-info {
     cursor: pointer;
 }
 
-/* 接続線とアローのスタイル */
-.joint-link .connection,
-.joint-link .marker-source,
-.joint-link .marker-target {
+/* 接続線のスタイル */
+.joint-link path {
     stroke: var(--text-color);
-    fill: var(--text-color);
+    stroke-width: 2;
 }
 
-.joint-link .marker-arrowhead {
-    fill: var(--text-color);
-    stroke: var(--text-color);
+/* すべてのマーカーとデコレーションを完全に無効化 */
+.joint-link * {
+    marker: none !important;
+    marker-start: none !important;
+    marker-mid: none !important;
+    marker-end: none !important;
+}
+
+.joint-link [class*="marker"],
+.joint-link .connection-wrap,
+.joint-link .tool-options,
+.joint-link .tool-remove,
+.joint-link .marker,
+.joint-link .marker-vertices,
+.joint-link .marker-arrowheads,
+.joint-link .marker-vertex-group,
+.joint-link .marker-arrowhead-group {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
 }
 
 .joint-port {

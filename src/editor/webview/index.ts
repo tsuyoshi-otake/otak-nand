@@ -667,16 +667,31 @@ class CircuitEditor {
     }
 
     private createConnection(connector: CircuitData['connectors'][0]): Joint.dia.Link {
-        return new Joint.dia.Link({
+        const link = new Joint.dia.Link({
             source: { id: connector.from.id, selector: connector.from.port },
             target: { id: connector.to.id, selector: connector.to.port },
+            router: { name: 'orthogonal' },
+            markup: '<path class="joint-link-path"/>',
             attrs: {
-                line: {
-                    stroke: this.currentStyle.gate_stroke,
-                    strokeWidth: 2
+                '.joint-link-path': {
+                    'stroke': this.currentStyle.gate_stroke,
+                    'stroke-width': 2,
+                    'fill': 'none',
+                    'class': 'joint-link-path'
                 }
             }
         });
+
+        // SVG要素が生成された後にマーカーを強制的に削除
+        setTimeout(() => {
+            const pathElement = link.findView(this.paper).findBySelector('path')[0];
+            if (pathElement) {
+                pathElement.removeAttribute('marker-end');
+                pathElement.removeAttribute('marker-start');
+            }
+        }, 0);
+
+        return link;
     }
 
     private getCircuitData(): CircuitData {
